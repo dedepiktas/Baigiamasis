@@ -1,0 +1,75 @@
+<!-- shop/templates/shop/home.html -->
+
+{% extends 'shop/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" href="#">Electro</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Features</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Pricing</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Jumbotron -->
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Welcome to Electro</h1>
+    <p class="lead">The best place to buy electronics online.</p>
+  </div>
+</div>
+
+<!-- Categories Section -->
+<div class="container categories-section">
+  <div class="row">
+    {% for category in categories %}
+    <div class="col-md-4">
+      <div class="card">
+        <img src="https://via.placeholder.com/350x150" class="card-img-top" alt="{{ category.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ category.name }}</h5>
+          <a href="#" class="btn btn-primary">Shop Now</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- New Products Section -->
+<div class="container mt-5 new-products-section">
+  <h2>New Products</h2>
+  <div class="row">
+    {% for product in new_products %}
+    <div class="col-md-3">
+      <div class="card">
+        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">${{ product.price }}</p>
+          <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-primary">Buy Now</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
