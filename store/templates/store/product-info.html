@@ -1,0 +1,103 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <main class="pt-5">
+        <div class="row g-3">
+            <div class="col-md-5 col-lg-5 order-md-first bg-light">
+                <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ product.image.url }}">
+            </div>
+
+            <div class="col-md-7 col-lg-7 ps-md-3 ps-lg-5">
+                <h1 class="mb-0 h4">{{ product.title }}</h1>
+                <strong>{{ product.brand }}</strong>
+                <hr>
+                <br>
+                <p>{{ product.description }}</p>
+                <div class="border">
+                    <div class="col border-bottom">
+                        <div class="row p-3">
+                            <div class="col-6">Price</div>
+                            <div class="col-6 text-end">
+                                <span class="h4 fw-bold">$ {{ product.price }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row p-3">
+                            <div class="col-6">
+                                <label for="select">Qty</label>
+                                &nbsp;
+                                <select id="select">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </div>
+                            <div class="col-6 text-end">
+                                <button type="button" id="add-button" value="{{ product.id }}" class="btn btn-secondary btn-sm">
+                                    <i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add to cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h4>Comments</h4>
+                <div id="comments-carousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for comment in comments %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="comment mb-3">
+                                <p><strong>{{ comment.author.username }}</strong> said:</p>
+                                <p>{{ comment.text }}</p>
+                                <p>Rating: {{ comment.rating }} / 5</p>
+                                <p class="text-muted"><small>{{ comment.created_date }}</small></p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#comments-carousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#comments-carousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                {% if user.is_authenticated %}
+                <hr>
+                <h4>Leave a comment</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="comment-text">Your Comment</label>
+                        <textarea id="comment-text" name="text" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment-rating">Your Rating</label>
+                        <div class="star-rating">
+                            {{ form.rating }}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                {% else %}
+                <p>You must be logged in to leave a comment.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+    <br>
+</div>
+
+<script>
+    var add_to_cart_url = "{% url 'cart-add' %}";
+    var csrf_token = "{{ csrf_token }}";
+</script>
+<script src="{% static 'js/product_detail.js' %}"></script>
+{% endblock %}
