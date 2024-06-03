@@ -8,16 +8,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 14rem; /* Adjust the card width as needed */
 }
 
 .card-img-top {
-    object-fit: contain;  /* Ensure the entire image is shown */
-    height: 200px;  /* Adjust this value as needed */
+    object-fit: cover;  /* Ensure the entire image is shown */
+    height: 250px;  /* Adjust this value */
     width: 100%;
-    background-color: #f8f9fa;  /* Light background color to distinguish image edges */
-    padding: 10px;  /* Optional: adds some padding around the image */
-    box-sizing: border-box;  /* Ensures padding is included in the element's total width and height */
 }
 
 .card-body {
@@ -61,7 +57,6 @@ footer p {
     margin: 0;
     line-height: 1.5;
 }
-
 .inline-radio {
     display: flex;
     justify-content: flex-start;
@@ -70,14 +65,11 @@ footer p {
 .inline-radio input {
     margin-right: 5px;
 }
-
-.carousel-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-}
-
-.carousel .carousel-item .card {
-    margin: 0 10px; /* Add some margin between cards */
+.card-img-top {
+    object-fit: contain;  /* Ensure the entire image is shown */
+    height: 250px;  /* Adjust this value as needed */
+    width: 100%;
+    background-color: #f8f9fa;  /* Light background color to distinguish image edges */
+    padding: 10px;  /* Optional: adds some padding around the image */
+    box-sizing: border-box;  /* Ensures padding is included in the element's total width and height */
 }

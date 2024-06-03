@@ -32,12 +32,12 @@
                 {% for product in my_products %}
                     {% if forloop.first %}
                         <div class="carousel-item active">
-                            <div class="row">
+                            <div class="row d-flex justify-content-center">
                     {% elif forloop.counter0|divisibleby:5 %}
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <div class="row">
+                            <div class="row d-flex justify-content-center">
                     {% endif %}
                         <div class="col-md-2">
                             <div class="card shadow-sm product-card">
