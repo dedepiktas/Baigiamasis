@@ -1,4 +1,4 @@
-{% extends "./base.html" %}
+{% extends "store/base.html" %}
 {% load static %}
 
 {% block content %}
@@ -33,13 +33,13 @@
                     {% if forloop.first %}
                         <div class="carousel-item active">
                             <div class="row d-flex justify-content-center">
-                    {% elif forloop.counter0|divisibleby:5 %}
+                    {% elif forloop.counter0|divisibleby:4 %}
                             </div>
                         </div>
                         <div class="carousel-item">
                             <div class="row d-flex justify-content-center">
                     {% endif %}
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="card shadow-sm product-card">
                                 <img class="card-img-top img-fluid" alt="Responsive image" src="{{ product.image.url }}">
                                 <div class="card-body">

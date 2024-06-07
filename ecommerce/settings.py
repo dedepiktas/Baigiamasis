@@ -1,30 +1,18 @@
-
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 
-SECRET_KEY = 'django-insecure-olc_l4v9uimldmd)xjf0qcgbl#f3zyln(b##@b26_&2q_oo@_d'
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1 [::1]').split()
 
-
-DEBUG = True
-
-#ALLOWED_HOSTS = ['mywebsite.com', 'www.mywebsite.com', 'localhost', '127.0.0.1', '*']
-
-ALLOWED_HOSTS = ['*']
-
-
-#CSRF_TRUSTED_ORIGINS = ['https://www.edenthought.com']
-
-
-# Set allowed cidr nets
-
-#ALLOWED_CIDR_NETS = ['172.17.0.0/16']
-
-
-# Application definition
+CSRF_TRUSTED_ORIGINS = os.getenv('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -33,34 +21,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'store', 
-    'cart', 
-    'account', 
-    'payment', 
+    'store',
+    'cart',
+    'account',
+    'payment',
     'mathfilters',
-    'crispy_forms', 
+    'crispy_forms',
     'storages',
-
-
+    'csp',
 ]
 
-# To un-block PayPal popups - NB!
-
-SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
-
-
-# Crispy forms
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-
-MIDDLEWARE = [ 
-
-    # Allow CIDR ranges
-
-    #'allow_cidr.middleware.AllowCIDRMiddleware',
-
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,6 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
@@ -83,20 +55,16 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'store.views.categories', # Updated
+                'store.views.categories',
                 'cart.context_processors.cart',
-
+                'store.context_processors.categories',
+                
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 
 DATABASES = {
     'default': {
@@ -105,143 +73,111 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
-
 MEDIA_ROOT = BASE_DIR / 'static/media'
 
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# Email configuration settings:
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
-EMAIL_USE_TLS = 'True'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-# Be sure to read the guide in the resources folder of this lecture (SETUP THE EMAIL BACKEND)
-
-EMAIL_HOST_USER = 'gediminaskulyslt@gmail.com'
-EMAIL_HOST_PASSWORD = 'rywt fswh ebay gqkk'
-
-
-# AWS credentials:
-'''
-AWS_ACCESS_KEY_ID = "" # Access Key ID 
-AWS_SECRET_ACCESS_KEY = "" # Secret Access Key ID
-
-# S3 configuration settings:
-
-AWS_STORAGE_BUCKET_NAME = '' 
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
-AWS_S3_FILE_OVERWRITE = False
-'''
-
-
-# Admin styling adjustment
-
-#ADMIN_MEDIA_PREFIX = '/static/admin/'
-
-
-# RDS (Database) configuration settings:
-
-'''
-DATABASES = {
-
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql',
-
-        'NAME': '',
-
-        'USER': '',
-
-        'PASSWORD': '',
-
-        'HOST': '',
-
-        'PORT': '5432',
-
-
-    }
-
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = (
+    "'self'",
+    'fonts.googleapis.com',
+    'https://bootswatch.com',
+    'https://cdnjs.cloudflare.com',
+    'https://maxcdn.bootstrapcdn.com',
+    'https://cdn.jsdelivr.net',
+    "'unsafe-inline'",
+)
+CSP_SCRIPT_SRC = (
+    "'self'",
+    'https://code.jquery.com',
+    'https://cdn.jsdelivr.net',
+    'https://cdnjs.cloudflare.com',
+    'https://maxcdn.bootstrapcdn.com',
+    'https://www.paypal.com',
+    'https://www.sandbox.paypal.com',
+    "'unsafe-inline'",
+)
+CSP_FONT_SRC = (
+    "'self'",
+    'fonts.googleapis.com',
+    'fonts.gstatic.com',
+    'https://cdnjs.cloudflare.com',
+    'https://maxcdn.bootstrapcdn.com',
+)
+CSP_IMG_SRC = (
+    "'self'",
+    'data:',
+    'https://*',
+    'http://*',
+)
+CSP_FRAME_SRC = (
+    "'self'",
+    'https://www.paypal.com',
+    'https://www.sandbox.paypal.com',
+)
+CSP_CONNECT_SRC = (
+    "'self'",
+    'https://www.paypal.com',
+    'https://www.sandbox.paypal.com',
+)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
 }
-'''
 
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_AGE = 1209600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'

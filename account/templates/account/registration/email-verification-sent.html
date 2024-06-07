@@ -1,51 +1,23 @@
-
-{% include "store/base.html" %}
+{% extends "store/base.html" %}
 
 {% load static %}
 
 {% block content %}
-
 <style>
-
-
-    body{
-
-
+    html, body {
         background-color: gray;
-
     }
+    </style>
+<br>
 
-
-
-</style>
-
-<body>
-
-    <br>
-
-    <div class="container bg-white shadow-md p-5 form-layout">
-
-        <div class="text-center">
-            
-            <i class="fa fa-envelope fa-3x" aria-hidden="true"></i>
-
-            <br> <br>
-   
-
-            <h5> <strong> A verification link was sent to your email! </strong> </h5>
-
-            <hr>
-
-            <p> Please check your email. </p>
-
-
-        </div>
-
-
+<div class="container bg-white shadow-md p-5 form-layout mt-5">
+    <div class="text-center">
+        <i class="fa fa-envelope fa-3x" aria-hidden="true"></i>
+        <br><br>
+        <h5><strong>A verification link was sent to your email!</strong></h5>
+        <hr>
+        <p>Please check your email.</p>
     </div>
-
-
-</body>
-
+</div>
 
 {% endblock %}

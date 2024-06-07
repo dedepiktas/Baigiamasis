@@ -31,21 +31,11 @@ urlpatterns = [
     path('reset_password_sent', auth_views.PasswordResetDoneView.as_view(template_name="account/password/password-reset-sent.html"), name='password_reset_done'),
     # 3) Password reset link
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="account/password/password-reset-form.html"), name='password_reset_confirm'),
-
-
     # 4) Success message stating that our password was reset
-
     path('reset_password_complete', auth_views.PasswordResetCompleteView.as_view(template_name="account/password/password-reset-complete.html"), name='password_reset_complete'),
-
-
-
     # Manage shipping url
-
     path('manage-shipping', views.manage_shipping, name='manage-shipping'),
-
-
     # Track orders url
-
     path('track-orders', views.track_orders, name='track-orders'),
 
 ]
