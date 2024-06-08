@@ -13,12 +13,11 @@ $(document).on('click', '#add-button', function(e){
             document.getElementById("cart-qty").textContent = json.qty;
         },
         error: function(xhr, errmsg, err){
-            // Handle error
+        
         }
     });
 });
 
-// Initialize the carousel
 $(document).ready(function(){
     $('#comments-carousel').carousel({
         interval: 2000
