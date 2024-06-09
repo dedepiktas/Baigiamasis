@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import django_heroku
+import dj_database_url
 
 load_dotenv()
 
@@ -58,7 +60,6 @@ TEMPLATES = [
                 'store.views.categories',
                 'cart.context_processors.cart',
                 'store.context_processors.categories',
-                
             ],
         },
     },
@@ -72,6 +73,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Heroku: Update database configuration from $DATABASE_URL.
+DATABASES['default'].update(dj_database_url.config(conn_max_age=600, ssl_require=True))
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -181,3 +185,6 @@ X_FRAME_OPTIONS = 'DENY'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
